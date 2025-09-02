@@ -4,10 +4,14 @@
   <meta charset="UTF-8">
   <title>Brella Wrapper</title>
   <style>
-    body, html {
+    html, body {
       margin: 0;
       padding: 0;
-      height: 100%;
+      width: 100%;
+      overflow-x: hidden; /* let Brella handle horizontal scrolling */
+    }
+
+    #brella-widget {
       width: 100%;
     }
   </style>
@@ -23,5 +27,16 @@
     </script>
   </div>
   <script async src="https://widget.brella.io"></script>
+
+  <script>
+    function sendHeight() {
+      const height = document.documentElement.scrollHeight;
+      window.parent.postMessage({ brellaHeight: height }, "*");
+    }
+
+    window.addEventListener("load", sendHeight);
+    window.addEventListener("resize", sendHeight);
+    setInterval(sendHeight, 1000); // keep checking dynamically
+  </script>
 </body>
 </html>
