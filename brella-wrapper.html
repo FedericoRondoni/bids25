@@ -4,22 +4,41 @@
   <meta charset="UTF-8" />
   <title>Brella Wrapper</title>
   <style>
-    /* Hide outer page scrollbars inside the iframe */
     html, body {
       margin: 0;
       padding: 0;
       overflow: hidden;
+      font-family: sans-serif;
     }
 
-    /* This is the ONLY scrollable area (both axes) */
+    .controls {
+      display: flex;
+      gap: 10px;
+      padding: 10px;
+      background: #f5f5f5;
+      border-bottom: 1px solid #ddd;
+    }
+
+    button {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      background: #0077cc;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #005fa3;
+    }
+
     .scrollbox {
-      width: 100vw;          /* viewport width of the iframe */
-      height: 100vh;         /* viewport height of the iframe */
-      overflow: auto;        /* enable vertical + horizontal */
-      -webkit-overflow-scrolling: touch; /* smooth iOS scroll */
+      width: 100vw;
+      height: calc(100vh - 50px); /* account for controls bar */
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
-    /* Brella can expand horizontally for many columns */
     #brella-widget {
       width: max-content;
       min-width: 100%;
@@ -27,17 +46,40 @@
   </style>
 </head>
 <body>
-  <div class="scrollbox">
-    <div id="brella-widget">
-      <script type="text/props">
-        {
-          "joinCode": "bids25",
-          "widgetType": "schedule-tracks",
-          "layout": "simplified"
-        }
-      </script>
-    </div>
+  <!-- Layout selector -->
+  <div class="controls">
+    <button onclick="loadBrella('linear')">Linear View</button>
+    <button onclick="loadBrella('simplified')">Simplified View</button>
   </div>
-  <script async src="https://widget.brella.io"></script>
+
+  <!-- Scrollable widget container -->
+  <div class="scrollbox">
+    <div id="brella-widget"></div>
+  </div>
+
+  <script>
+    function loadBrella(layout) {
+      const container = document.getElementById("brella-widget");
+      container.innerHTML = `
+        <script type="text/props">
+          {
+            "joinCode": "bids25",
+            "widgetType": "schedule-tracks",
+            "layout": "${layout}"
+          }
+        <\/script>
+      `;
+      // re-inject Brella script so it re-renders
+      const oldScript = document.querySelector("script[src='https://widget.brella.io']");
+      if (oldScript) oldScript.remove();
+      const s = document.createElement("script");
+      s.src = "https://widget.brella.io";
+      s.async = true;
+      document.body.appendChild(s);
+    }
+
+    // load default layout on page load
+    loadBrella("linear");
+  </script>
 </body>
 </html>
