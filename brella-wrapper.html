@@ -10,11 +10,11 @@
       height: 100%;
       width: 100%;
       overflow-x: auto;   /* allow horizontal scrolling */
-      overflow-y: hidden; /* optional: hide vertical scroll if not needed */
+      overflow-y: auto;   /* ✅ allow vertical scrolling too */
     }
 
     #brella-widget {
-      width: max-content; /* expand to fit all columns of the programme */
+      width: max-content; /* expand to fit all programme columns */
       min-width: 100%;    /* don’t shrink smaller than iframe width */
     }
   </style>
