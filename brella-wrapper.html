@@ -1,33 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Brella Wrapper</title>
   <style>
-    body, html {
+    /* Hide outer page scrollbars inside the iframe */
+    html, body {
       margin: 0;
       padding: 0;
-      height: 100%;
-      width: 100%;
-      overflow-x: auto;   /* allow horizontal scrolling */
-      overflow-y: auto;   /* ✅ allow vertical scrolling too */
+      overflow: hidden;
     }
 
+    /* This is the ONLY scrollable area (both axes) */
+    .scrollbox {
+      width: 100vw;          /* viewport width of the iframe */
+      height: 100vh;         /* viewport height of the iframe */
+      overflow: auto;        /* enable vertical + horizontal */
+      -webkit-overflow-scrolling: touch; /* smooth iOS scroll */
+    }
+
+    /* Brella can expand horizontally for many columns */
     #brella-widget {
-      width: max-content; /* expand to fit all programme columns */
-      min-width: 100%;    /* don’t shrink smaller than iframe width */
+      width: max-content;
+      min-width: 100%;
     }
   </style>
 </head>
 <body>
-  <div id="brella-widget">
-    <script type="text/props">
-      {
-        "joinCode": "bids25",
-        "widgetType": "schedule-tracks",
-        "layout": "linear"
-      }
-    </script>
+  <div class="scrollbox">
+    <div id="brella-widget">
+      <script type="text/props">
+        {
+          "joinCode": "bids25",
+          "widgetType": "schedule-tracks",
+          "layout": "linear"
+        }
+      </script>
+    </div>
   </div>
   <script async src="https://widget.brella.io"></script>
 </body>
