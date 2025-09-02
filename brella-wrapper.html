@@ -34,7 +34,7 @@
 
     .scrollbox {
       width: 100vw;
-      height: calc(100vh - 50px); /* account for controls bar */
+      height: calc(100vh - 50px); /* space for control bar */
       overflow: auto;
       -webkit-overflow-scrolling: touch;
     }
@@ -60,25 +60,33 @@
   <script>
     function loadBrella(layout) {
       const container = document.getElementById("brella-widget");
-      container.innerHTML = `
-        <script type="text/props">
-          {
-            "joinCode": "bids25",
-            "widgetType": "schedule-tracks",
-            "layout": "${layout}"
-          }
-        <\/script>
-      `;
-      // re-inject Brella script so it re-renders
-      const oldScript = document.querySelector("script[src='https://widget.brella.io']");
-      if (oldScript) oldScript.remove();
-      const s = document.createElement("script");
-      s.src = "https://widget.brella.io";
-      s.async = true;
-      document.body.appendChild(s);
+
+      // Clear old content
+      container.innerHTML = "";
+
+      // Create new <script type="text/props">
+      const props = document.createElement("script");
+      props.type = "text/props";
+      props.textContent = JSON.stringify({
+        joinCode: "bids25",
+        widgetType: "schedule-tracks",
+        layout: layout
+      });
+
+      container.appendChild(props);
+
+      // Remove old brella loader (if any)
+      const old = document.querySelector("script[src='https://widget.brella.io']");
+      if (old) old.remove();
+
+      // Add fresh loader
+      const loader = document.createElement("script");
+      loader.src = "https://widget.brella.io";
+      loader.async = true;
+      document.body.appendChild(loader);
     }
 
-    // load default layout on page load
+    // Load default view
     loadBrella("linear");
   </script>
 </body>
